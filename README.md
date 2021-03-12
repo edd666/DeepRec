@@ -1,2 +1,12 @@
 # deeprec
-基于tensorflow2.0实现深度学习推荐算法(召回和排序).
+
+根据推荐系统的不同阶段以及优化目标，可分为：
+
+- 召回（Recall）
+- 排序（Ranking）
+  - 点击率（CTR）
+  - 转化率（CVR）
+  - 多目标（Multi task learning）
+
+
+
