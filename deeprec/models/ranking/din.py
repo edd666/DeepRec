@@ -36,7 +36,7 @@ def DIN(feature_columns, behavior_columns):
     seq_pooling_list = get_seq_pooling_list(input_dict, embedding_dict, seq_pooling_feature_columns)
 
     # attention
-    
+
     pass
 
 
