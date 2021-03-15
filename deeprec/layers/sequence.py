@@ -11,6 +11,7 @@
 # packages
 import tensorflow as tf
 from tensorflow.keras import layers
+from deeprec.layers.core import LocalActivationUnit
 
 
 class SequencePoolingLayer(layers.Layer):
@@ -98,3 +99,108 @@ class SequencePoolingLayer(layers.Layer):
         base_config.update(config)
 
         return base_config
+
+
+class AttentionSequencePoolingLayer(layers.Layer):
+    """
+    The Attentional sequence pooling operation used in DIN.
+
+    Input shape
+        - A list of 3 tensor [query, keys, keys_length]
+        - query is a 3D tensor with shape: (batch_size, 1, embedding_size)
+        - keys is a 3D tensor with shape: (batch_size, T, embedding_size)
+        - keys_length is a 2D tensor with shape : (batch_size, 1),indicate valid length of each sequence.
+
+    Output shape
+        - 3D tensor with shape: (batch_size, 1, embedding_size).
+
+    References
+        - Deep interest network for click-through rate prediction[C] (https://arxiv.org/pdf/1706.06978.pdf).
+    """
+
+    def __init__(self, hidden_units=(36,), activation='Dice', mask_zero=True,
+                 weight_normalization=False, return_score=False, **kwargs):
+        """
+
+        :param hidden_units: tuple Attention模块各层神经元数量
+        :param activation: str Attention模块激活函数
+        :param mask_zero: bool 是否支持mask
+        :param weight_normalization: bool 注意力系数是否归一化
+        :param return_score: bool 是否返回注意力系数
+        :param kwargs:
+        """
+        super(AttentionSequencePoolingLayer, self).__init__(**kwargs)
+        self.hidden_units = hidden_units
+        self.activation = activation
+        self.mask_zero = mask_zero
+        self.weight_normalization = weight_normalization
+        self.return_score = return_score
+        # inside params
+        self.local_att = None
+
+    def build(self, input_shape):
+        # Be sure to call this somewhere!
+        super(AttentionSequencePoolingLayer, self).build(input_shape)
+        self.local_att = LocalActivationUnit(
+            hidden_units=self.hidden_units,
+            activation=self.activation,
+            dropout_rate=0,
+            use_bn=False)
+
+    def call(self, inputs, mask=None, training=None, **kwargs):
+        if self.mask_zero:
+            if mask is None:
+                raise ValueError("When mask_zero=True,input must support masking.")
+            query, keys = inputs
+            keys_mask = tf.expand_dims(mask[1], axis=1)
+        else:
+            query, keys, keys_length = inputs
+            seq_len = keys.get_shape()[1]
+            keys_mask = tf.sequence_mask(keys_length, seq_len)
+
+        att_score = self.local_att([query, keys])
+
+        if self.weight_normalization:
+            padding = tf.ones_like(att_score) * (-2 ** 32 + 1)
+        else:
+            padding = tf.zeros_like(att_score)
+
+        att_score = tf.where(keys_mask, att_score, padding)
+
+        if self.weight_normalization:
+            att_score = tf.nn.softmax(att_score, axis=-1)
+
+        # keys乘以相应的attention_score
+        # batch matrix multiplication
+        if not self.return_score:
+            return tf.matmul(att_score, keys)
+
+        att_score._uses_learning_phase = training is not None
+
+        return att_score
+
+    def compute_output_shape(self, input_shape):
+        if self.return_score:
+            shape = (None, 1, input_shape[1][1])
+        else:
+            shape = (None, 1, input_shape[0][-1])
+
+        return shape
+
+    def compute_mask(self, inputs, mask=None):
+
+        return None
+
+    def get_config(self):
+        config = {
+            'att_hidden_units': self.att_hidden_units,
+            'att_activation': self.att_activation,
+            'return_score': self.return_score,
+            'mask_zero': self.mask_zero,
+            'weight_normalization': self.weight_normalization,
+        }
+        base_config = super(AttentionSequencePoolingLayer, self).get_config()
+        base_config.update(config)
+
+        return base_config
+

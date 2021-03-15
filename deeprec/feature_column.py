@@ -63,17 +63,17 @@ class SparseFeat(namedtuple('SparseFeat',
 
 class VarLenSparseFeat(namedtuple('VarLenSparseFeat',
                                   ['sparsefeat', 'maxlen', 'combiner',
-                                   'weight_name', 'weight_norm'])):
+                                   'length_name', 'weight_name', 'weight_norm'])):
     """
     序列特征
     """
     __slots__ = ()
 
-    def __new__(cls, sparsefeat, maxlen, combiner='mean',
+    def __new__(cls, sparsefeat, maxlen, combiner='mean', length_name=None,
                 weight_name=None, weight_norm=True, *args, **kwargs):
 
         return super(VarLenSparseFeat, cls).__new__(cls, sparsefeat, maxlen,
-                                                    combiner, weight_name, weight_norm)
+                                                    combiner, length_name, weight_name, weight_norm)
 
     @property
     def name(self):
@@ -135,6 +135,9 @@ def build_input_dict(feature_columns):
 
             if fc.weight_name is not None:
                 input_dict[fc.weight_name] = keras.Input(shape=(fc.maxlen, 1), name=fc.weight_name, dtype='float32')
+
+            if fc.length_name is not None:
+                input_dict[fc.length_name] = keras.Input(shape=(1,), name=fc.length_name, dtype='int32')
 
         else:
             raise ValueError('Invalid type in feature columns.')
