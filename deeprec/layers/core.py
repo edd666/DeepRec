@@ -55,8 +55,7 @@ class LocalActivationUnit(layers.Layer):
             dropout_rate=self.dropout_rate,
             use_bn=self.use_bn)
 
-        # 若hidden_units的长度为0,DNN将直接返回输入
-        size = int(input_shape[0][-1]) if len(self.hidden_units) == 0 else self.hidden_units[-1]
+        size = 4 * int(input_shape[0][-1]) if len(self.hidden_units) == 0 else self.hidden_units[-1]
         self.kernel = self.add_weight(name='kernel', shape=(size, 1), initializer='random_normal', trainable=True)
         self.bias = self.add_weight(name='bias', shape=(1,), initializer='zeros', trainable=True)
 

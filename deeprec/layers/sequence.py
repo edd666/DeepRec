@@ -120,15 +120,6 @@ class AttentionSequencePoolingLayer(layers.Layer):
 
     def __init__(self, hidden_units=(36,), activation='Dice', mask_zero=True,
                  weight_normalization=False, return_score=False, **kwargs):
-        """
-
-        :param hidden_units: tuple Attention模块各层神经元数量
-        :param activation: str Attention模块激活函数
-        :param mask_zero: bool 是否支持mask
-        :param weight_normalization: bool 注意力系数是否归一化
-        :param return_score: bool 是否返回注意力系数
-        :param kwargs:
-        """
         super(AttentionSequencePoolingLayer, self).__init__(**kwargs)
         self.hidden_units = hidden_units
         self.activation = activation
@@ -159,6 +150,7 @@ class AttentionSequencePoolingLayer(layers.Layer):
             keys_mask = tf.sequence_mask(keys_length, seq_len)
 
         att_score = self.local_att([query, keys])
+        att_score = tf.transpose(att_score, (0, 2, 1))
 
         if self.weight_normalization:
             padding = tf.ones_like(att_score) * (-2 ** 32 + 1)
@@ -168,14 +160,10 @@ class AttentionSequencePoolingLayer(layers.Layer):
         att_score = tf.where(keys_mask, att_score, padding)
 
         if self.weight_normalization:
-            att_score = tf.nn.softmax(att_score, axis=-1)
+            att_score = tf.nn.softmax(att_score)
 
-        # keys乘以相应的attention_score
-        # batch matrix multiplication
         if not self.return_score:
             return tf.matmul(att_score, keys)
-
-        att_score._uses_learning_phase = training is not None
 
         return att_score
 
@@ -203,4 +191,3 @@ class AttentionSequencePoolingLayer(layers.Layer):
         base_config.update(config)
 
         return base_config
-

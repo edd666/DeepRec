@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88c7481f-c68d-4ab9-83a8-0404d62e71ae" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/deeprec/feature_column.py" beforeDir="false" afterPath="$PROJECT_DIR$/deeprec/feature_column.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deeprec/layers/core.py" beforeDir="false" afterPath="$PROJECT_DIR$/deeprec/layers/core.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/deeprec/layers/sequence.py" beforeDir="false" afterPath="$PROJECT_DIR$/deeprec/layers/sequence.py" afterDir="false" />
     </list>
@@ -14,25 +14,13 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/deeprec/layers/core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-581">
+            <state relative-caret-position="-2389">
               <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
               <folding>
                 <element signature="e#137#160#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/deeprec/layers/sequence.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="725">
-              <caret line="197" selection-start-line="103" selection-end-line="197" />
-              <folding>
-                <element signature="e#142#165#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -70,8 +58,8 @@
         <option value="$PROJECT_DIR$/deeprec/inputs.py" />
         <option value="$PROJECT_DIR$/deeprec/models/ranking/din.py" />
         <option value="$PROJECT_DIR$/deeprec/layers/activation.py" />
-        <option value="$PROJECT_DIR$/deeprec/layers/core.py" />
         <option value="$PROJECT_DIR$/deeprec/feature_column.py" />
+        <option value="$PROJECT_DIR$/deeprec/layers/core.py" />
         <option value="$PROJECT_DIR$/deeprec/layers/sequence.py" />
       </list>
     </option>
@@ -219,12 +207,13 @@
       <workItem from="1615771776054" duration="897000" />
       <workItem from="1615773161638" duration="6299000" />
       <workItem from="1615788293152" duration="1166000" />
-      <workItem from="1615790493592" duration="9756000" />
+      <workItem from="1615790493592" duration="10683000" />
+      <workItem from="1615807001585" duration="228000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58791000" />
+    <option name="totallyTimeSpent" value="59946000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="6" />
@@ -373,22 +362,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/deeprec/layers/core.py">
+    <entry file="file://$PROJECT_DIR$/deeprec/layers/sequence.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-581">
-          <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
+        <state relative-caret-position="-31">
+          <caret line="155" column="34" selection-start-line="155" selection-start-column="25" selection-end-line="155" selection-end-column="34" />
           <folding>
-            <element signature="e#137#160#0" expanded="true" />
+            <element signature="e#142#165#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/deeprec/layers/sequence.py">
+    <entry file="file://$PROJECT_DIR$/deeprec/layers/core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="725">
-          <caret line="197" selection-start-line="103" selection-end-line="197" />
+        <state relative-caret-position="-2389">
+          <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
           <folding>
-            <element signature="e#142#165#0" expanded="true" />
+            <element signature="e#137#160#0" expanded="true" />
           </folding>
         </state>
       </provider>
