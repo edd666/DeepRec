@@ -10,11 +10,11 @@
 
 # packages
 from deeprec.layers.utils import concat_func
-from deeprec.feature_column import SparseFeat, build_input_dict
-from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_lookup, get_varlen_pooling_list
+from deeprec.feature_column import SparseFeat, VarLenSparseFeat, build_input_dict
+from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_lookup, get_seq_pooling_list
 
 
-def DIN(feature_columns, query_columns):
+def DIN(feature_columns, behavior_columns):
 
     # 1,构建输入字典
     input_dict = build_input_dict(feature_columns)
@@ -28,19 +28,15 @@ def DIN(feature_columns, query_columns):
     sparse_feature_columns = list(filter(lambda x: isinstance(x, SparseFeat), feature_columns))
     sparse_embedding_list = embedding_lookup(input_dict, embedding_dict, sparse_feature_columns, to_list=True)
 
-    # varlen sparse = seq
+    # seq = varlen sparse
     # pooling
-    seq_embedding_list = get_varlen_pooling_list(input_dict, embedding_dict, feature_columns)
+    hist_behavior_columns = ['hist_' + str(col) for col in behavior_columns]
+    seq_feature_columns = list(filter(lambda x: isinstance(x, VarLenSparseFeat), feature_columns))
+    seq_pooling_feature_columns = [fc for fc in seq_feature_columns if fc.name not in hist_behavior_columns]
+    seq_pooling_list = get_seq_pooling_list(input_dict, embedding_dict, seq_pooling_feature_columns)
 
     # attention
-    query_feature_columns = [fc for fc in feature_columns if fc.name in query_columns]
-    query_embedding_list = embedding_lookup(input_dict, embedding_dict, query_feature_columns, to_list=True)
-    query = concat_func(query_embedding_list, mask=True)
-    keys_columns = ['hist_' + str(col) for col in query_columns]
-    keys_feature_columns = [fc for fc in feature_columns if fc.name in keys_columns]
-    keys_embedding_list = embedding_lookup(input_dict, embedding_dict, keys_feature_columns, to_list=True)
-    keys = concat_func(keys_embedding_list, mask=True)
-
+    
     pass
 
 

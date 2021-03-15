@@ -22,5 +22,17 @@ class DNN(layers.Layer):
     Output shape
         - A tensor with shape: (batch_size, ..., hidden_units[-1]).
     """
+    def __init__(self, hidden_units, activation='relu', dropout_rate=0, use_bn=False, **kwargs):
+        super(DNN, self).__init__(**kwargs)
+        self.hidden_units = hidden_units
+        self.activation = activation
+        self.dropout_rate = dropout_rate
+        self.use_bn = use_bn
+        pass
 
+    def input_shape(self):
+        pass
+
+    def call(self, inputs, **kwargs):
+        pass
     pass

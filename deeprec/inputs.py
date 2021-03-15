@@ -100,20 +100,21 @@ def embedding_lookup(input_dict, embedding_dict, query_feature_columns, to_list=
     return query_embedding_dict
 
 
-def get_varlen_pooling_list(input_dict, embedding_dict, feature_columns):
+def get_seq_pooling_list(input_dict, embedding_dict, seq_feature_columns):
     """
     对序列特征(VarLenSparseFeat)进行Pooling操作
 
+    注意:
+        1,seq = varlen sparse
+
     :param input_dict: dict 输入字典,形如{feature_name: keras.Input()}
     :param embedding_dict: embedding字典,形如{embedding_name: embedding_table}
-    :param feature_columns: list 特征列
+    :param seq_feature_columns: list 序列特征(VarLenSparseFeat)
     :return:
     """
     # 1,对VarLenSparseFeat的embedding进行Pooling操作
     seq_value_pooling_list = []
-    varlen_sparse_feature_columns = list(filter(
-        lambda x: isinstance(x, VarLenSparseFeat), feature_columns))
-    for fc in varlen_sparse_feature_columns:
+    for fc in seq_feature_columns:
         feature_name = fc.name
         embedding_name = fc.embedding_name
         if fc.weight_name is not None:
@@ -125,4 +126,3 @@ def get_varlen_pooling_list(input_dict, embedding_dict, feature_columns):
         seq_value_pooling_list.append(seq_value_pooling)
 
     return seq_value_pooling_list
-
