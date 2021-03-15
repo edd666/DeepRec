@@ -9,12 +9,18 @@
 """
 
 # packages
+import tensorflow as tf
+from tensorflow.keras import layers
+from deeprec.layers.core import DNN
 from deeprec.layers.utils import concat_func
+from deeprec.layers.sequence import AttentionSequencePoolingLayer
 from deeprec.feature_column import SparseFeat, VarLenSparseFeat, build_input_dict
-from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_lookup, get_seq_pooling_list
+from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_lookup, get_varlen_pooling_list
 
 
-def DIN(feature_columns, behavior_columns):
+def DIN(feature_columns, behavior_columns, att_hidden_units=(36,),
+        att_activation='Dice', dnn_hidden_units=(64, 32), dnn_activation='relu',
+        dnn_dropout_rate=0.2, dnn_use_bn=True):
 
     # 1,构建输入字典
     input_dict = build_input_dict(feature_columns)
@@ -33,10 +39,40 @@ def DIN(feature_columns, behavior_columns):
     hist_behavior_columns = ['hist_' + str(col) for col in behavior_columns]
     seq_feature_columns = list(filter(lambda x: isinstance(x, VarLenSparseFeat), feature_columns))
     seq_pooling_feature_columns = [fc for fc in seq_feature_columns if fc.name not in hist_behavior_columns]
-    seq_pooling_list = get_seq_pooling_list(input_dict, embedding_dict, seq_pooling_feature_columns)
+    seq_pooling_embedding_list = get_varlen_pooling_list(input_dict, embedding_dict, seq_pooling_feature_columns)
 
     # attention
+    query_feature_columns = [fc for fc in feature_columns if fc.name in behavior_columns]
+    query_embedding_list = embedding_lookup(input_dict, embedding_dict, query_feature_columns, to_list=True)
+    query = concat_func(query_embedding_list, mask=True)
+    keys_feature_columns = [fc for fc in feature_columns if fc.name in hist_behavior_columns]
+    keys_embedding_list = embedding_lookup(input_dict, embedding_dict, keys_feature_columns, to_list=True)
+    keys = concat_func(keys_embedding_list, mask=True)
+    hist = AttentionSequencePoolingLayer(
+        hidden_units=att_hidden_units,
+        activation=att_activation,
+        mask_zero=True,
+        weight_normalization=False,
+        return_score=False)([query, keys])
 
-    pass
+    # concat
+    dnn_embedding_input = concat_func(sparse_embedding_list + seq_pooling_embedding_list + [hist], mask=False)
+    dnn_embedding_input = layers.Flatten()(dnn_embedding_input)
+    dnn_input = concat_func(dense_value_list + [dnn_embedding_input], mask=False)
+
+    # 4,DNN
+    dnn_output = DNN(
+        hidden_units=dnn_hidden_units,
+        activation=dnn_activation,
+        dropout_rate=dnn_dropout_rate,
+        use_bn=dnn_use_bn,)(dnn_input)
+    dnn_output = layers.Dense(1, activation='sigmoid', name='ctr_output')(dnn_output)
+
+    # 5,model
+    model = tf.keras.Model(
+        inputs=input_dict,
+        outputs=dnn_output
+    )
+    return model
 
 

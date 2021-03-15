@@ -72,8 +72,8 @@ class VarLenSparseFeat(namedtuple('VarLenSparseFeat',
     def __new__(cls, sparsefeat, maxlen, combiner='mean', length_name=None,
                 weight_name=None, weight_norm=True, *args, **kwargs):
 
-        return super(VarLenSparseFeat, cls).__new__(cls, sparsefeat, maxlen,
-                                                    combiner, length_name, weight_name, weight_norm)
+        return super(VarLenSparseFeat, cls).__new__(cls, sparsefeat, maxlen, combiner,
+                                                    length_name, weight_name, weight_norm)
 
     @property
     def name(self):

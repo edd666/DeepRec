@@ -100,21 +100,18 @@ def embedding_lookup(input_dict, embedding_dict, query_feature_columns, to_list=
     return query_embedding_dict
 
 
-def get_seq_pooling_list(input_dict, embedding_dict, seq_feature_columns):
+def get_varlen_pooling_list(input_dict, embedding_dict, varlen_sparse_feature_columns):
     """
     对序列特征(VarLenSparseFeat)进行Pooling操作
 
-    注意:
-        1,seq = varlen sparse
-
     :param input_dict: dict 输入字典,形如{feature_name: keras.Input()}
     :param embedding_dict: embedding字典,形如{embedding_name: embedding_table}
-    :param seq_feature_columns: list 序列特征(VarLenSparseFeat)
+    :param varlen_sparse_feature_columns: list 序列特征
     :return:
     """
     # 1,对VarLenSparseFeat的embedding进行Pooling操作
-    seq_value_pooling_list = []
-    for fc in seq_feature_columns:
+    pooling_value_list = []
+    for fc in varlen_sparse_feature_columns:
         feature_name = fc.name
         embedding_name = fc.embedding_name
         if fc.weight_name is not None:
@@ -122,7 +119,8 @@ def get_seq_pooling_list(input_dict, embedding_dict, seq_feature_columns):
         else:
             seq_value = embedding_dict[embedding_name](input_dict[feature_name])
 
-        seq_value_pooling = SequencePoolingLayer(mode=fc.combiner, mask_zero=True)(seq_value)
-        seq_value_pooling_list.append(seq_value_pooling)
+        pooling_value = SequencePoolingLayer(mode=fc.combiner, mask_zero=True)(seq_value)
+        pooling_value_list.append(pooling_value)
 
-    return seq_value_pooling_list
+    return pooling_value_list
+
