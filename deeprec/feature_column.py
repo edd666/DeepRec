@@ -36,7 +36,6 @@ class SparseFeat(namedtuple('SparseFeat',
                             ['name', 'vocabulary_size', 'embedding_dim', 'use_hash',
                              'dtype', 'embeddings_initializer', 'embedding_name',
                              'group_name', 'trainable'])):
-
     """
     类别特征
     """

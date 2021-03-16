@@ -19,7 +19,7 @@ from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_look
 
 
 def DIN(feature_columns, behavior_columns, att_hidden_units=(36,), att_activation='Dice',
-        weight_normalization=False, dnn_hidden_units=(64, 32), dnn_activation='relu',
+        att_weight_normalization=False, dnn_hidden_units=(64, 32), dnn_activation='relu',
         dnn_dropout_rate=0.2, dnn_use_bn=True):
     """
     DIN模型
@@ -28,7 +28,7 @@ def DIN(feature_columns, behavior_columns, att_hidden_units=(36,), att_activatio
     :param behavior_columns: list 行为序列(Attention)的特征名称
     :param att_hidden_units: tuple Attention中DNN神经元数
     :param att_activation: str Attention中DNN的激活函数
-    :param weight_normalization: bool Attention中score是否归一化
+    :param att_weight_normalization: bool Attention中score是否归一化
     :param dnn_hidden_units: tuple DNN模型各层神经元数量
     :param dnn_activation: str DNN模型激活函数
     :param dnn_dropout_rate: float DNN模型dropout_rate
@@ -65,7 +65,7 @@ def DIN(feature_columns, behavior_columns, att_hidden_units=(36,), att_activatio
         hidden_units=att_hidden_units,
         activation=att_activation,
         mask_zero=True,
-        weight_normalization=weight_normalization,
+        weight_normalization=att_weight_normalization,
         return_score=False)([query, keys])
 
     # concat

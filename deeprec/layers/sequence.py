@@ -188,8 +188,8 @@ class AttentionSequencePoolingLayer(layers.Layer):
 
     def get_config(self):
         config = {
-            'att_hidden_units': self.att_hidden_units,
-            'att_activation': self.att_activation,
+            'hidden_units': self.hidden_units,
+            'activation': self.activation,
             'return_score': self.return_score,
             'mask_zero': self.mask_zero,
             'weight_normalization': self.weight_normalization,
