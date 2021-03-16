@@ -73,7 +73,7 @@ def embedding_lookup(input_dict, embedding_dict, query_feature_columns, to_list=
     embedding查询
 
     注意:
-        1,query_feature_columns可以包含SparseFeat和VarLenSparseFeat
+        1,query_feature_columns可以是SparseFeat或VarLenSparseFeat
         2,input_dict和embedding_dict必须包含相应的输入和embedding table
 
     :param input_dict: dict 输入字典,形如{feature_name: keras.Input()}

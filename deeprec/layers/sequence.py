@@ -27,8 +27,7 @@ class SequencePoolingLayer(layers.Layer):
     Output shape
         - 3D tensor with shape: (batch_size, 1, embedding_size).
     """
-
-    def __init__(self, mode, mask_zero=False, **kwargs):
+    def __init__(self, mode, mask_zero=True, **kwargs):
         """
 
         :param mode: str Pooling方法
@@ -117,9 +116,17 @@ class AttentionSequencePoolingLayer(layers.Layer):
     References
         - Deep interest network for click-through rate prediction[C] (https://arxiv.org/pdf/1706.06978.pdf).
     """
-
     def __init__(self, hidden_units=(36,), activation='Dice', mask_zero=True,
                  weight_normalization=False, return_score=False, **kwargs):
+        """
+
+        :param hidden_units: list 各层神经元数量
+        :param activation:  str 激活函数
+        :param mask_zero: bool 是否支持mask
+        :param weight_normalization: bool att_score归一化
+        :param return_score: bool 是否返回att_score
+        :param kwargs:
+        """
         super(AttentionSequencePoolingLayer, self).__init__(**kwargs)
         self.hidden_units = hidden_units
         self.activation = activation
