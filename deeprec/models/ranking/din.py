@@ -19,10 +19,14 @@ from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_look
 
 
 def DIN(feature_columns, behavior_columns, att_hidden_units=(36,), att_activation='Dice',
-        att_weight_normalization=False, dnn_hidden_units=(64, 32), dnn_activation='relu',
+        att_weight_normalization=False, dnn_hidden_units=(200, 80), dnn_activation='relu',
         dnn_dropout_rate=0.2, dnn_use_bn=True):
     """
     DIN模型
+
+    注意:
+        1,feature_columns中特征的相对顺序关系,如item_id,cate_id,其对应的行为序列为
+            hist_item_id,hist_item_id.(主要是attention的时候特征要对齐)
 
     :param feature_columns: list 特征列
     :param behavior_columns: list 行为序列(Attention)的特征名称
@@ -45,6 +49,7 @@ def DIN(feature_columns, behavior_columns, att_hidden_units=(36,), att_activatio
     dense_value_list = get_dense_value(input_dict, feature_columns)
 
     sparse_feature_columns = list(filter(lambda x: isinstance(x, SparseFeat), feature_columns))
+    sparse_feature_columns = [fc for fc in sparse_feature_columns if fc.name not in behavior_columns]
     sparse_embedding_list = embedding_lookup(input_dict, embedding_dict, sparse_feature_columns, to_list=True)
 
     # seq = varlen sparse
