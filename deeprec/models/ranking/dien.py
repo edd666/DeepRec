@@ -137,7 +137,7 @@ def interest_evolution(behavior_concat, item_dnn_input, neg_behavior_concat=None
 
 def DIEN(feature_columns, behavior_columns, use_neg=True, gru_type='AUGRU',
          att_hidden_units=(64, 16), att_activation='Dice', att_weight_normalization=False,
-         dnn_hidden_units=(200, 80), dnn_activation='relu', dnn_dropout_rate=0.2, dnn_use_bn=True,
+         dnn_hidden_units=(256, 128), dnn_activation='relu', dnn_dropout_rate=0.5, dnn_use_bn=True,
          alpha=1.0):
     """
     DIEN模型

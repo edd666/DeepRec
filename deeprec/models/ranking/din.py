@@ -18,9 +18,9 @@ from deeprec.feature_column import SparseFeat, VarLenSparseFeat, build_input_dic
 from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_lookup, get_varlen_pooling_list
 
 
-def DIN(feature_columns, behavior_columns, att_hidden_units=(36,), att_activation='Dice',
-        att_weight_normalization=False, dnn_hidden_units=(200, 80), dnn_activation='relu',
-        dnn_dropout_rate=0.2, dnn_use_bn=True):
+def DIN(feature_columns, behavior_columns, att_hidden_units=(64, 16), att_activation='Dice',
+        att_weight_normalization=False, dnn_hidden_units=(256, 128), dnn_activation='relu',
+        dnn_dropout_rate=0.5, dnn_use_bn=True):
     """
     DIN模型
 
