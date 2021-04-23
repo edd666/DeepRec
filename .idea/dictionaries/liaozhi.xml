@@ -4,15 +4,19 @@
       <w>agru</w>
       <w>aigru</w>
       <w>augru</w>
+      <w>ctcvr</w>
       <w>dien</w>
       <w>dtype</w>
+      <w>esmm</w>
       <w>glorot</w>
       <w>keras</w>
       <w>liaozhi</w>
       <w>maxlen</w>
+      <w>mmoe</w>
       <w>noclick</w>
       <w>perceptron</w>
       <w>relu</w>
+      <w>softmax</w>
       <w>sparsefeat</w>
       <w>varlen</w>
     </words>
