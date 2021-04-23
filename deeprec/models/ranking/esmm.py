@@ -77,8 +77,8 @@ def ESMM(user_feature_columns, item_feature_columns, behavior_columns,
     query_feature_columns = [fc for fc in feature_columns if fc.name in behavior_columns]
     query_embedding_list = embedding_lookup(input_dict, embedding_dict, query_feature_columns, to_list=True)
     query = concat_func(query_embedding_list, mask=True)
-    hist_feature_columns = [fc for fc in feature_columns if fc.name in hist_behavior_columns]
-    keys_embedding_list = embedding_lookup(input_dict, embedding_dict, hist_feature_columns, to_list=True)
+    keys_feature_columns = [fc for fc in feature_columns if fc.name in hist_behavior_columns]
+    keys_embedding_list = embedding_lookup(input_dict, embedding_dict, keys_feature_columns, to_list=True)
     keys = concat_func(keys_embedding_list, mask=True)
     hist = AttentionSequencePoolingLayer(
         hidden_units=att_hidden_units,
