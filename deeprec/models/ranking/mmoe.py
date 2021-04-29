@@ -105,9 +105,9 @@ def MMOE(feature_columns, behavior_columns, task_towers, att_hidden_units=(64, 1
         dropout_rate=dropout_rate,)(dnn_input)
 
     # 5,子任务的输出
-    task_outputs = dict()
+    task_outputs = list()
     for idx, (name, task_tower) in enumerate(task_towers.items()):
-        task_outputs[name] = task_tower(task_inputs[idx])
+        task_outputs.append(task_tower(task_inputs[idx]))
 
     # 6,functional model
     model = tf.keras.Model(
