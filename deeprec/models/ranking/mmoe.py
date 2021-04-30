@@ -19,15 +19,19 @@ from deeprec.feature_column import SparseFeat, VarLenSparseFeat, build_input_dic
 from deeprec.inputs import build_embedding_dict, get_dense_value, embedding_lookup, get_varlen_pooling_list
 
 
-def MMOE(feature_columns, behavior_columns, task_towers, att_hidden_units=(64, 16),
-         att_activation='Dice', att_weight_normalization=False, num_experts=8,
-         expert_hidden_units=(64,), add_dropout=True, dropout_rate=0.1):
+def MMOE(feature_columns, behavior_columns, task_models, att_hidden_units=(64, 16),
+         att_activation='Dice', att_weight_normalization=False, num_experts=4,
+         expert_hidden_units=(64,), add_dropout=False, dropout_rate=0.1):
     """
     MMOE模型
 
+    注意:
+        1,feature_columns中特征的相对顺序关系,如item_id,cate_id,其对应的行为序列为
+            hist_item_id,hist_item_id.(主要是attention的时候特征要对齐)
+
     :param feature_columns: list 特征列
-    :param behavior_columns: list 行为特征名称
-    :param task_towers: dict 任务网络, 形如{task_name: Model}
+    :param behavior_columns: list 行为特征名称,表示哪些特征需要进行Attention
+    :param task_models: dict 任务网络, 形如{task_name: Model}
     :param att_hidden_units: tuple Attention中DNN神经元数
     :param att_activation: str Attention中DNN的激活函数
     :param att_weight_normalization: bool Attention中score是否归一化
@@ -58,8 +62,8 @@ def MMOE(feature_columns, behavior_columns, task_towers, att_hidden_units=(64, 1
     else:
         # 序列特征做Pooling或Attention
         hist_behavior_columns = ['hist_' + str(col) for col in behavior_columns]
-        query_feature_columns = [fc for fc in feature_columns if fc.name in behavior_columns]
-        keys_feature_columns = [fc for fc in feature_columns if fc.name in hist_behavior_columns]
+        query_feature_columns = [fc for fc in sparse_feature_columns if fc.name in behavior_columns]
+        keys_feature_columns = [fc for fc in seq_feature_columns if fc.name in hist_behavior_columns]
         assert len(behavior_columns) == len(query_feature_columns) == len(keys_feature_columns)
 
         # sparse
@@ -100,14 +104,14 @@ def MMOE(feature_columns, behavior_columns, task_towers, att_hidden_units=(64, 1
     ]
     task_inputs = MultiGateMixtureOfExpertsLayer(
         experts=experts,
-        num_tasks=len(task_towers),
+        num_tasks=len(task_models),
         add_dropout=add_dropout,
         dropout_rate=dropout_rate,)(dnn_input)
 
     # 5,子任务的输出
     task_outputs = list()
-    for idx, (name, task_tower) in enumerate(task_towers.items()):
-        task_outputs.append(task_tower(task_inputs[idx]))
+    for idx, (name, task_model) in enumerate(task_models.items()):
+        task_outputs.append(task_model(task_inputs[idx]))
 
     # 6,functional model
     model = tf.keras.Model(
