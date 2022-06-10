@@ -1,39 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="74c8aa91-cea0-4f86-bc31-17ff81c45509" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/utils.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deeprec.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deeprec.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/deployment.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dictionaries/liaozhi.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/fileTemplates/internal/Python Script.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/feature_column.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/inputs.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/layers/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/layers/activation.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/layers/cells.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/layers/core.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/layers/gate.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/layers/sequence.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/layers/utils.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/models/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/models/ranking/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/models/ranking/dien.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/models/ranking/din.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/models/ranking/esmm.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/models/ranking/mmoe.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/deeprec/models/recall/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/utils/utils.py" beforeDir="false" />
-    </list>
+    <list default="true" id="74c8aa91-cea0-4f86-bc31-17ff81c45509" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,6 +38,7 @@
       <option name="presentableId" value="Default" />
       <updated>1654852042776</updated>
       <workItem from="1654852047078" duration="150000" />
+      <workItem from="1654852199592" duration="488000" />
     </task>
     <servers />
   </component>
@@ -86,5 +55,6 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>
