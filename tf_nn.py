@@ -176,3 +176,71 @@ def build_embedding_dict(feature_columns):
                                                              trainable=fc.trainable,
                                                              name='varlen_sparse_emb_' + fc.embedding_name)
     return embedding_dict
+
+
+def embedding_lookup(input_dict, embedding_dict, query_feature_columns, to_list=False):
+    """
+    embedding查询
+
+    注意:
+        1,query_feature_columns可以是SparseFeat或VarLenSparseFeat
+        2,input_dict和embedding_dict必须包含相应的输入和embedding table
+
+    :param input_dict: dict 输入字典,形如{feature_name: keras.Input()}
+    :param embedding_dict: embedding字典,形如{embedding_name: embedding_table}
+    :param query_feature_columns: list 待查询的特征列
+    :param to_list: bool 是否转成list
+    :return:
+    """
+    # 1,查询
+    query_embedding_dict = OrderedDict()
+    for fc in query_feature_columns:
+        feature_name = fc.name
+        embedding_name = fc.embedding_name
+        if fc.use_hash:
+            raise ValueError('hash embedding lookup has not yet been implemented.')
+        else:
+            lookup_idx = input_dict[feature_name]
+        query_embedding_dict[feature_name] = embedding_dict[embedding_name](lookup_idx)
+
+    if to_list:
+        return list(query_embedding_dict.values())
+
+    return query_embedding_dict
+
+
+class SequencePoolingLayer(layers.Layer):
+
+    def __init__(self, mode, maxlen, **kwargs):
+        super(SequencePoolingLayer, self).__init__(**kwargs)
+        self.mode = mode
+        self.maxlen = maxlen
+        pass
+
+    def build(self, input_shape):
+        pass
+
+    def call(self, inputs, **kwargs):
+        pass
+
+    pass
+
+
+def get_varlen_pooling_list(input_dict, embedding_dict, varlen_sparse_feature_columns):
+    """
+    对序列特征(VarLenSparseFeat)进行Pooling操作
+    :param input_dict: dict 输入字典,形如{feature_name: keras.Input()}
+    :param embedding_dict: embedding字典,形如{embedding_name: embedding_table}
+    :param varlen_sparse_feature_columns: list 序列特征
+    :return:
+    """
+    # 1,对VarLenSparseFeat的embedding进行Pooling操作
+    for fc in varlen_sparse_feature_columns:
+        feature_name = fc.name
+        embedding_name = fc.embedding_name
+        feature_length_name = fc.length_name
+        if fc.weight_name is not None:
+            raise ValueError('pooling with weight has not yet been implemented.')
+        else:
+            pass
+    pass
