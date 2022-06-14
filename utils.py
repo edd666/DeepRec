@@ -17,6 +17,7 @@ import numpy as np
 def get_time_dif(start_time):
     """
     获取时间间隔
+
     :param start_time: 起始时间
     :return:
     """
@@ -44,4 +45,3 @@ def build_data_dict(df, varlen_sparse_feature_columns=None):
             data_dict[name] = value
 
     return data_dict
-

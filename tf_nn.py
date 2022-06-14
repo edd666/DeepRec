@@ -10,6 +10,7 @@
 
 # packages
 import tensorflow as tf
+from tensorflow.keras import layers
 from collections import namedtuple, OrderedDict
 from tensorflow.python.keras.initializers import RandomNormal
 
@@ -124,3 +125,54 @@ def build_input_dict(feature_columns):
             raise ValueError('Invalid type in feature columns, got', type(fc))
 
     return input_dict
+
+
+def get_dense_value(input_dict, feature_columns):
+    """
+    获取数值输入
+
+    :param input_dict: dict 输入字典,形如{feature_name: keras.Input()}
+    :param feature_columns: list 特征列
+    :return:
+        dense_value_list: list 数值输入
+    """
+    # 1,获取DenseFeat
+    dense_value_list = list()
+    dense_feature_columns = list(filter(
+        lambda x: isinstance(x, DenseFeat), feature_columns))
+    for fc in dense_feature_columns:
+        dense_value_list.append(input_dict[fc.name])
+
+    return dense_value_list
+
+
+def build_embedding_dict(feature_columns):
+    """
+    基于特征列(feature columns)构建Embedding字典
+
+    :param feature_columns: list 特征列
+    :return:
+        embedding_dict: embedding字典,形如{embedding_name: embedding_table}
+    """
+    # 1,获取SparseFeat和VarLenSparseFeat
+    sparse_feature_columns = list(filter(
+        lambda x: isinstance(x, SparseFeat), feature_columns))
+    varlen_sparse_feature_columns = list(filter(
+        lambda x: isinstance(x, VarLenSparseFeat), feature_columns))
+
+    # 2,构建Embedding字典
+    embedding_dict = OrderedDict()
+    for fc in sparse_feature_columns:
+        embedding_dict[fc.embedding_name] = layers.Embedding(input_dim=fc.vocabulary_size,
+                                                             output_dim=fc.embedding_dim,
+                                                             embeddings_initializer=fc.embeddings_initializer,
+                                                             trainable=fc.trainable,
+                                                             name='sparse_emb_' + fc.embedding_name)
+
+    for fc in varlen_sparse_feature_columns:
+        embedding_dict[fc.embedding_name] = layers.Embedding(input_dim=fc.vocabulary_size,
+                                                             output_dim=fc.embedding_dim,
+                                                             embeddings_initializer=fc.embeddings_initializer,
+                                                             trainable=fc.trainable,
+                                                             name='varlen_sparse_emb_' + fc.embedding_name)
+    return embedding_dict
