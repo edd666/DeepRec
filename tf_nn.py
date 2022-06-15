@@ -57,15 +57,15 @@ class SparseFeat(namedtuple('SparseFeat',
 
 
 class VarLenSparseFeat(namedtuple('VarLenSparseFeat',
-                                  ['sparsefeat', 'maxlen', 'length_name',
-                                   'combiner', 'weight_name', 'weight_norm'])):
+                                  ['sparsefeat', 'maxlen', 'combiner',
+                                   'weight_name', 'weight_norm'])):
     __slots__ = ()
 
-    def __new__(cls, sparsefeat, maxlen, length_name, combiner='mean',
+    def __new__(cls, sparsefeat, maxlen, combiner='mean',
                 weight_name=None, weight_norm=None):
 
-        return super(VarLenSparseFeat, cls).__new__(cls, sparsefeat, maxlen, length_name,
-                                                    combiner, weight_name, weight_norm)
+        return super(VarLenSparseFeat, cls).__new__(cls, sparsefeat, maxlen, combiner,
+                                                    weight_name, weight_norm)
 
     @property
     def name(self):
@@ -117,9 +117,7 @@ def build_input_dict(feature_columns):
         elif isinstance(fc, VarLenSparseFeat):
             input_dict[fc.name] = tf.keras.Input(shape=(fc.maxlen,), name=fc.name, dtype=fc.dtype)
 
-            input_dict[fc.length_name] = tf.keras.Input(shape=(1,), name=fc.length_name, dtype='int32')
-
-            if fc.weight_name:
+            if fc.weight_name is not None:
                 input_dict[fc.weight_name] = tf.keras.Input(shape=(fc.maxlen, 1), name=fc.weight_name, dtype='float32')
         else:
             raise ValueError('Invalid type in feature columns, got', type(fc))
@@ -174,6 +172,7 @@ def build_embedding_dict(feature_columns):
                                                              output_dim=fc.embedding_dim,
                                                              embeddings_initializer=fc.embeddings_initializer,
                                                              trainable=fc.trainable,
+                                                             mask_zero=True,
                                                              name='varlen_sparse_emb_' + fc.embedding_name)
     return embedding_dict
 
@@ -238,7 +237,6 @@ def get_varlen_pooling_list(input_dict, embedding_dict, varlen_sparse_feature_co
     for fc in varlen_sparse_feature_columns:
         feature_name = fc.name
         embedding_name = fc.embedding_name
-        feature_length_name = fc.length_name
         if fc.weight_name is not None:
             raise ValueError('pooling with weight has not yet been implemented.')
         else:
