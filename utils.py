@@ -24,7 +24,7 @@ def get_time_dif(start_time):
     end_time = time.time()
     time_dif = end_time - start_time
 
-    return datetime.timedelta(seconds=int(round(time_dif)))
+    return datetime.timedelta(seconds=round(time_dif))
 
 
 def build_data_dict(df, varlen_sparse_feature_columns=None):
