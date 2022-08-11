@@ -33,32 +33,4 @@ def DNN(feature_columns):
     seq_feature_columns = list(filter(lambda x: isinstance(x, VarLenSparseFeat), feature_columns))
     seq_pooling_embedding_list = get_varlen_pooling_list(input_dict, embedding_dict, seq_feature_columns)
 
-    # concat
-    dnn_embedding_input = concat_func(sparse_embedding_list + seq_pooling_embedding_list, mask=False)
-    dnn_embedding_input = layers.Flatten()(dnn_embedding_input)
-    dnn_input = concat_func(dense_value_list + [dnn_embedding_input], mask=False)
-
-    # 4,DNN模型
-    dnn_output = tf.keras.Sequential(
-        [
-            tf.keras.layers.BatchNormalization(),
-            tf.keras.layers.Dense(256, activation='relu'),
-            tf.keras.layers.Dropout(0.5),
-
-            tf.keras.layers.BatchNormalization(),
-            tf.keras.layers.Dense(128, activation='relu'),
-            tf.keras.layers.Dropout(0.5),
-
-            tf.keras.layers.BatchNormalization(),
-            tf.keras.layers.Dense(64, activation='relu'),
-            tf.keras.layers.Dropout(0.5)
-        ]
-    )(dnn_input)
-
-    # 5,模型
-    model = tf.keras.Model(
-        inputs=list(input_dict.values()),
-        outputs=dnn_output
-    )
-
-    return model
+    return None
